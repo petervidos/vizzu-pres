@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizzu - Carrot</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+    <div id="vizzuWrapper"></div>
+
+<script type="module" defer>
+    window.onbeforeunload = function() {
+    window.scrollTo(0, 0);
+}
+
+import VizzuSlides from './vizzu-slides.js';
+
+let data = {
+    series: [{
+            name: 'Actors',
+            type: 'dimension'
+        },
+        {
+            name: 'Label',
+            type: 'dimension'
+        },
+        {
+            name: 'Carrot',
+            type: 'dimension'
+        },
+        {
+            name: 'Plant',
+            type: 'measure'
+        },
+        {
+            name: 'Growing',
+            type: 'measure'
+        },
+        {
+            name: 'Before pulling',
+            type: 'measure'
+        },
+        {
+            name: 'Pulling1',
+            type: 'measure'
+        },
+        {
+            name: 'Pulling2',
+            type: 'measure'
+        },
+        {
+            name: 'Pulling3',
+            type: 'measure'
+        },
+        {
+            name: 'Pulling4',
+            type: 'measure'
+        },
+        {
+            name: 'Pulling5',
+            type: 'measure'
+        },
+        {
+            name: 'Out',
+            type: 'measure'
+        },
+        {
+            name: 'Out back',
+            type: 'measure'
+        },
+        {
+            name: 'Before jump',
+            type: 'measure'
+        },
+        {
+            name: 'Jump',
+            type: 'measure'
+        },
+    ],
+    records: [
+        ['Big carrot', ' ', 'under', '-1', '-42', '-42', '-40', '-38', '-36', '-34', '-32', '0', '0', '0', '0'],
+        ['Big carrot', ' ', 'upper', '1', '44', '44', '44', '44', '44', '44', '44', '44', '44', '44', '44'],
+        ['Big carrot', 'Big carrot', 'green', '1', '3', '3', '3', '3', '3', '3', '3', '3', '3', '3', '3'],
+        ['Grandpa', ' ', 'jump1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
+        ['Grandpa', 'Grandpa', 'Grandpa', '17', '17', '15', '19', '21', '23', '25', '27', '29', '17', '15', '19'],
+        ['Grandma', ' ', 'jump2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
+        ['Grandma', 'Grandma', 'Grandma', '16', '16', '14', '16', '18', '20', '22', '24', '26', '16', '14', '18'],
+        ['Grandson', ' ', 'jump3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3'],
+        ['Grandson', 'Grandson', 'Grandson', '11', '11', '9', '11', '11', '13', '15', '17', '19', '11', '9', '13'],
+        ['Dog', ' ', 'jump4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5'],
+        ['Dog', 'Dog', 'Dog', '7', '7', '5', '7', '7', '7', '9', '11', '13', '7', '5', '9'],
+        ['Cat', ' ', 'jump5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '6'],
+        ['Cat', 'Cat', 'Cat', '6', '6', '4', '6', '6', '6', '6', '8', '10', '6', '4', '8'],
+        ['Mouse', ' ', 'jump6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '8'],
+        ['Mouse', 'Mouse', 'Mouse', '3', '3', '1', '3', '3', '3', '3', '3', '5', '3', '1', '5'],
+    ]
+};
+
+let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
+[
+    [
+    chart => chart.animate({
+            data: data,
+            config: {
+                channels: {
+                    y: {
+                        set: ['Plant', 'Carrot', 'Label'],
+                        range: {
+                            min: '-50',
+                            max: '50'
+                        }
+                    },
+                    x: {
+                        set: ['Actors'],
+                        range: {
+                            min: '0',
+                            max: '7'
+                        }
+                    },
+                    color: 'Carrot',
+                    label: {
+                        set: ['Label']
+                    },
+                },
+                title: 'The Enormous Carrot',
+                legend: null
+            },
+            style: {
+                plot: {
+                    paddingLeft: '9em',
+                    marker: {
+                        colorPalette: '#fd7000 #fd7000 #2e6b00 #ffffff #338da2 #ffffff #00a07a #ffffff #d63661 #ffffff #b57537 #ffffff #d69814 #ffffff #a1a1a1',
+                        label: {
+                            position: 'top',
+                            fontSize: '1em'
+                        }
+                    },
+                    yAxis: {
+                        label: {
+                            fontSize: '0em',
+                            paddingRight: '1em'
+                        },
+                        title: {
+                            fontSize: '0em'
+                        },
+                        interlacing: {
+                            color: '#ffffffFF'
+                        }
+                    },
+                    xAxis: {
+                        label: {
+                            angle: 0,
+                            fontSize: '0em'
+                        },
+                        title: {
+                            fontSize: '0em',
+                            paddingTop: '2.5em'
+                        }
+                    }
+                }
+            }
+        }, {
+            duration: '0'
+        }, ),
+        chart => chart.animate({
+            data: {
+                filter: record => record.Actors != 'Grandma' &&
+                    record.Actors != 'Grandson' &&
+                    record.Actors != 'Dog' &&
+                    record.Actors != 'Cat' &&
+                    record.Actors != 'Mouse',
+            },
+
+
+            config: {
+                channels: {
+                    y: {
+                        set: ['Plant', 'Carrot', 'Label'],
+                        range: {
+                            min: '-50',
+                            max: '50'
+                        }
+                    },
+                    x: {
+                        set: ['Actors'],
+                        range: {
+                            min: '0',
+                            max: '7'
+                        }
+                    },
+                    color: 'Carrot',
+                    label: {
+                        set: ['Label']
+                    },
+                },
+                title: 'The Enormous Carrot',
+                legend: null
+            },
+            style: {
+                plot: {
+                    paddingLeft: '9em',
+                    marker: {
+                        colorPalette: '#fd7000 #fd7000 #2e6b00 #ffffff #338da2 #ffffff #00a07a #ffffff #d63661 #ffffff #b57537 #ffffff #d69814 #ffffff #a1a1a1',
+                        label: {
+                            position: 'top',
+                            fontSize: '1em'
+                        }
+                    },
+                    yAxis: {
+                        label: {
+                            fontSize: '0em',
+                            paddingRight: '1em'
+                        }
+                    },
+                    //                 interlacing: {color:'#ffffffFF'},
+                    xAxis: {
+                        label: {
+                            angle: 0,
+                            fontSize: '0em'
+                        },
+                        title: {
+                            fontSize: '0em',
+                            paddingTop: '2.5em'
+                        }
+                    }
+                }
+            }
+        }, {
+            duration: '0'
+        }, ),
+
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '4'
+        }, ),
+
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before pulling', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1'
+        }, ),
+
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Pulling1', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1.5'
+        }, )
+    ],
+    
+    //grandma
+    [
+        chart => chart.animate({
+                data: {
+                    filter: record =>
+                        record.Actors != 'Grandson' &&
+                        record.Actors != 'Dog' &&
+                        record.Actors != 'Cat' &&
+                        record.Actors != 'Mouse',
+                },
+                config: {
+                    channels: {
+                        y: {
+                            set: ['Growing', 'Label', 'Carrot']
+                        }
+                    }
+                }
+            }, {
+                duration: '0.5'
+            }, ),
+            chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before pulling', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Pulling2', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1.5'
+        }, )
+
+    ],
+
+    //granddoughter
+    [
+        chart => chart.animate({
+                data: {
+                    filter: record =>
+                        record.Actors != 'Dog' &&
+                        record.Actors != 'Cat' &&
+                        record.Actors != 'Mouse',
+                },
+                config: {
+                    channels: {
+                        y: {
+                            set: ['Growing', 'Label', 'Carrot']
+                        }
+                    }
+                }
+            }, {
+                duration: '0.5'
+            }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before pulling', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Pulling3', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1.5'
+        }, ),
+
+    ],
+    //dog
+    [
+        chart => chart.animate({
+            data: {
+                filter: record =>
+                    record.Actors != 'Cat' &&
+                    record.Actors != 'Mouse',
+            },
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.5'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before pulling', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Pulling4', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1.5'
+        }, )
+    ],
+    //cat
+    [
+        chart => chart.animate({
+            data: {
+                filter: record =>
+                    record.Actors != 'Mouse',
+            },
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.5'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before pulling', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Pulling5', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Growing', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1.5'
+        }, )
+    ],
+    //mouse
+    [
+        chart => chart.animate({
+                data: {
+                    filter: null,
+                },
+                config: {
+                    channels: {
+                        y: {
+                            set: ['Growing', 'Label', 'Carrot']
+                        }
+                    }
+                }
+            }, {
+                duration: '0.5'
+            }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before pulling', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Out', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Out back', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '1.2'
+        }, )
+    ],
+    //jumping
+    [
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Jump', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before jump', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.5'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Jump', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before jump', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.5'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Jump', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.3'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Before jump', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.5'
+        }, ),
+        chart => chart.animate({
+            config: {
+                channels: {
+                    y: {
+                        set: ['Out back', 'Label', 'Carrot']
+                    }
+                }
+            }
+        }, {
+            duration: '0.6'
+        }, )
+    ]
+]
+);
+
+myVizzuSlides.initialized.then(() => {
+    console.log("MySlides init");
+	myVizzuSlides.playAnim(0,0);
+});
+
+    </script>

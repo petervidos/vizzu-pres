@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vizzu - Carrot</title>
-    <link rel="stylesheet" href="./style.css" />
-</head>
-<body>
-    <div id="vizzuWrapper"></div>
 
-<script type="module" defer>
-    window.onbeforeunload = function() {
-    window.scrollTo(0, 0);
+import Vizzu from 'https://cdn.jsdelivr.net/npm/vizzu@latest/dist/vizzu.min.js';
+import ScrollyTelling from './scrollyTelling.js';
+import data from './data.js';
+import style from './style.js';
+
+window.onbeforeunload = function () {
+	window.scrollTo(0, 0);
 }
-
-import VizzuSlides from './vizzu-slides.js';
-import data from './scrollytelling/data.js';
-import style from './scrollytelling/scrollystyle.js';
 
 function labelHandler(event) {
 	let Year = parseFloat(event.data.text);
@@ -25,16 +14,16 @@ function labelHandler(event) {
 		event.preventDefault();
 }
 
-let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
-[
-    [
-    chart => chart.animate({
-        data: Object.assign(data, {
+ScrollyTelling.init(Vizzu, "#scrollyTellingContainer", "#vizzuArticle",
+	[
+
+		chart => chart.animate({
+			data: Object.assign(data, {
 				filter: record => record.Function != 'Defense',
 			}),
-            config: {
-                channels: {
-                    y: {
+			config: {
+				channels: {
+					y: {
 						set: ['Amount[B$]', 'Function'],
 						range: {
 							min: '0%',
@@ -49,11 +38,10 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				title: 'U.S. Non-Defense R&D Budget by Functions',
 				geometry: 'area'
 			},
-            style: style,
-        }),
-    ],
-    [
-        chart => {
+			style: style
+		}),
+
+		chart => {
 			chart.on('plot-axis-label-draw', labelHandler);
 			return chart.animate({
 				config: {
@@ -62,9 +50,8 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				}
 			});
 		},
-    ],
-    [
-        chart => chart.animate({
+
+		chart => chart.animate({
 			data: {
 				filter: record => record.Function == 'Health' || record.Function == 'Space'
 			},
@@ -73,10 +60,9 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				align: 'min',
 				split: true
 			}
-		}),        
-    ],
-    [
-        chart => chart.animate({
+		}),
+
+		chart => chart.animate({
 			data: {
 				filter: record => record.Function != 'Defense',
 			},
@@ -86,9 +72,8 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				split: true
 			}
 		}),
-    ],
-    [
-        chart => chart.animate({
+
+		chart => chart.animate({
 			data: {
 				filter: null,
 			},
@@ -97,14 +82,26 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				split: false
 			}
 		}),
-    ],
-        
-]
-);
 
-myVizzuSlides.initialized.then(() => {
-    console.log("MySlides init");
-	myVizzuSlides.playAnim(0,0);
-});
+		chart => chart.animate({
+			data: {
+				filter: record => record.Function == 'Defense'
+			},
+			config: {
+				title: 'Defense Expenditures',
+				align: 'min'
+			}
+		}),
 
-    </script>
+		chart => chart.animate({
+			data: {
+				filter: null,
+			},
+			config: {
+				title: 'Total U.S. R&D Budget',
+			}
+		})
+
+	], { scrollType: "animate" });
+
+
