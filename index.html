@@ -29,9 +29,7 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 [
     [
     chart => chart.animate({
-        data: Object.assign(data, {
-				filter: record => record.Function != 'Defense',
-			}),
+        data: data,
             config: {
                 channels: {
                     y: {
