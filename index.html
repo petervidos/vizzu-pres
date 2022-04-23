@@ -51,8 +51,8 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 			},
             style: style,
         }),
-    
-    
+    ],
+    [   //2. slide
         chart => {
 			chart.on('plot-axis-label-draw', labelHandler);
 			return chart.animate({
@@ -63,7 +63,7 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 			});
 		},
     ],
-    [   //2. slide
+    [   //3. slide
         chart => chart.animate({
 			data: {
 				filter: record => record.Function == 'Health' || record.Function == 'Space'
@@ -74,8 +74,7 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				split: true
 			}
 		}),        
-    ],
-    [   //3. slide
+    
         chart => chart.animate({
 			data: {
 				filter: record => record.Function != 'Defense',
