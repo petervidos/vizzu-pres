@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vizzu - US R&D</title>
+    <title>Vizzu - Carrot</title>
     <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -19,17 +19,19 @@ import VizzuSlides from './vizzu-slides.js';
 import data from './scrollytelling/data.js';
 import style from './scrollytelling/scrollystyle.js';
 
-/*function labelHandler(event) {
+function labelHandler(event) {
 	let Year = parseFloat(event.data.text);
 	if (!isNaN(Year) && Year > 1950 && Year < 2020 && Year % 5 != 0)
 		event.preventDefault();
-}*/
+}
 
 let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 [
-    [
+    [   //1. slide
     chart => chart.animate({
-        data: data,
+        data: Object.assign(data, {
+				filter: record => record.Function != 'Defense',
+			}),
             config: {
                 channels: {
                     y: {
@@ -49,8 +51,8 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 			},
             style: style,
         }),
-    ],
-    [
+    
+    
         chart => {
 			chart.on('plot-axis-label-draw', labelHandler);
 			return chart.animate({
@@ -61,7 +63,7 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 			});
 		},
     ],
-    [
+    [   //2. slide
         chart => chart.animate({
 			data: {
 				filter: record => record.Function == 'Health' || record.Function == 'Space'
@@ -73,7 +75,7 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 			}
 		}),        
     ],
-    [
+    [   //3. slide
         chart => chart.animate({
 			data: {
 				filter: record => record.Function != 'Defense',
@@ -85,7 +87,7 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 			}
 		}),
     ],
-    [
+    [   //4. slide
         chart => chart.animate({
 			data: {
 				filter: null,
@@ -95,6 +97,27 @@ let myVizzuSlides = new VizzuSlides('#vizzuWrapper',
 				split: false
 			}
 		}),
+
+        chart => chart.animate({
+			data: {
+				filter: record => record.Function == 'Defense'
+			},
+			config: {
+				title: 'Defense Expenditures',
+				align: 'min'
+			}
+		}),
+    ],
+    [   //5. slide
+        chart => chart.animate({
+			data: {
+				filter: null,
+			},
+			config: {
+				title: 'Total U.S. R&D Budget',
+			}
+		})
+
     ],
         
 ]
