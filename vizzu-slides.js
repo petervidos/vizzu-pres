@@ -1,3 +1,4 @@
+
 import Vizzu from 'https://cdn.jsdelivr.net/npm/vizzu@latest/dist/vizzu.min.js';
 
 export default class VizzuSlides
@@ -66,7 +67,7 @@ export default class VizzuSlides
 
 		this.nextSlide = function()
 		{
-
+			this.animDirection = 'forward';
 			let nextSlideNum = (this.currentAnimation.slideNum +1);
 			if (nextSlideNum >= this.slides.length)
 			{
@@ -80,16 +81,51 @@ export default class VizzuSlides
 
 		this.prevSlide = function()
 		{
-			let prevSlideNum = (this.currentAnimation.slideNum -1);
-			if (prevSlideNum < 0)
+			this.animDirection = 'prev';
+			if(this.currentAnimation.stageNum == 0)
 			{
-				prevSlideNum = 0;
+				let prevSlideNum = (this.currentAnimation.slideNum -1);
+				if (prevSlideNum < 0)
+				{
+					prevSlideNum = 0;
+				}
+				this.seekToEnd().then((chart) => {
+					this.playAnim(prevSlideNum, (this.slides[prevSlideNum].length-1), false);
+				});
+			} else
+			{
+				this.seekToEnd().then((chart) => {
+					this.playAnim(this.currentAnimation.slideNum, this.currentAnimation.stageNum-1, false);
+				});
 			}
+			
+		}
+
+		this.lastSlide = function()
+		{
+			this.animDirection = 'forward';
+
 			this.seekToEnd().then((chart) => {
-				this.playAnim(prevSlideNum, 0, false);
+				this.animPlaying = true;
+				this.anim = this.chart.animate(this.nullSlide).then((chart) => {
+					this.playAnim(this.slides.length -1, 0, false);
+				});
+				return chart;
 			});
 		}
 
+		this.firstSlide = function()
+		{
+			this.animDirection = 'forward';
+
+			this.seekToEnd().then((chart) => {
+				this.animPlaying = true;
+				this.anim = this.chart.animate(this.nullSlide).then((chart) => {
+					this.playAnim(0, 0, false);
+				});
+				return chart;
+			});
+		}
 		
 		wrapperElement.insertAdjacentHTML("beforeend", controlHTML);
 		this.chart = new Vizzu(vizzuCanvasId);
@@ -98,6 +134,7 @@ export default class VizzuSlides
 		this.playingStage = 0;
 		this.slides = [];
 		
+		this.animDirection = "forward";
 		this.currentAnimation = {};
 		this.currentAnimation.slideNum = 0;
 		this.currentAnimation.stageNum = 0;
@@ -142,23 +179,28 @@ export default class VizzuSlides
 		});
 
 		document.querySelector("[data-vizzu-navbarbtn-last]").addEventListener("click", () => {
-			this.seekToEnd().then((chart) => {
-				this.animPlaying = true;
-				this.anim = this.chart.animate(this.nullSlide).then((chart) => {
-					this.playAnim(this.slides.length -1, 0, false);
-				});
-				return chart;
-			});
+			this.lastSlide();
 		});
 
 		document.querySelector("[data-vizzu-navbarbtn-first]").addEventListener("click", () => {
-			this.seekToEnd().then((chart) => {
-				this.animPlaying = true;
-				this.anim = this.chart.animate(this.nullSlide).then((chart) => {
-					this.playAnim(0, 0, false);
-				});
-				return chart;
-			});
+			this.firstSlide();
+		});
+
+
+		document.addEventListener("keydown", (event) => {
+			if(event.key == 'ArrowLeft' || event.key == 'PageUp')
+			{
+				this.prevSlide();
+			} else if(event.key == 'ArrowRight' || event.key == 'PageDown')
+			{
+				this.nextSlide();
+			} else if(event.key == 'End')
+			{
+				this.lastSlide();
+			} else if(event.key == 'Home')
+			{
+				this.firstSlide();
+			}
 		});
 
 		document.querySelector(".vizzu-navbar-button-fullscreen").addEventListener("click", function() {
@@ -221,7 +263,6 @@ export default class VizzuSlides
 			this.chart.off('logo-draw', enableRender);
 			//this.chart.on('update', updateSlider)
 		}).then(() => {
-			this.slides[0].shift();
 		});
 	}
 
@@ -292,18 +333,44 @@ export default class VizzuSlides
 		new Promise((resolve) => setTimeout(() => {
 				let animStage = this.getAnimation(slideNum, stageNum);
 				if(!afterUpdate) { this.updateStageNum(animStage); }
-				this.anim = this.chart.animate(animStage).then((chart) => {
-					if(afterUpdate) { this.updateStageNum(animStage); }
-					
-					if(!firstOnly) {
-						let nextStageNum = (this.currentAnimation.stageNum +1);
-						if (nextStageNum < this.slides[this.currentAnimation.slideNum].length)
-						{
-							this.playAnim(this.currentAnimation.slideNum, nextStageNum);
+				
+				if(this.animDirection == "forward")
+				{
+					this.anim = this.chart.animate(animStage).then((chart) => {
+						if(afterUpdate) { this.updateStageNum(animStage); }
+						
+						
+						if(!firstOnly) {
+							let nextStageNum = (this.currentAnimation.stageNum +1);
+							if (nextStageNum < this.slides[this.currentAnimation.slideNum].length)
+							{
+								this.playAnim(this.currentAnimation.slideNum, nextStageNum);
+							}
 						}
-					}
-					return chart;
-				});
+						
+						return chart;
+					});
+				} else
+				{
+					this.anim = this.chart.animate(animStage).reverse().then((chart) => {
+						if(afterUpdate) { this.updateStageNum(animStage); }
+						
+						
+						if(!firstOnly) {
+							let prevStageNum = (this.currentAnimation.stageNum -1);
+							if (prevStageNum > 0)
+							{
+								this.playAnim(this.currentAnimation.slideNum, prevStageNum);
+							}
+						}
+						
+						return chart;
+					});
+
+					
+				}
+				
+
 			resolve(this.chart);
 		}, 0));
 	}
