@@ -1,3 +1,4 @@
+
 ::root 
 {
     --vizzu-passive-thumbcolor: #fff;
@@ -342,7 +343,7 @@ body
     cursor: pointer;
 }
 
-.vizzu-navbutton > svg {
+.vizzu-navbutton > svg, .disabled-navbtn > svg {
     width: 13px;
     height: 13px;
 }
@@ -351,9 +352,25 @@ body
     fill: #A2A2A2;
 }
 
-.vizzu-navbutton:hover path
+.disabled-navbtn
 {
-    fill: #404040;
+    position:relative;
+    overflow: visible;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    display: -moz-box;
+    justify-content: center;
+    align-items: center;
+    cursor:not-allowed;
+    padding: 0px;
+    border-radius: 0;
+}
+
+.disabled-navbtn path, .disabled-navbtn:hover path, .disabled-navbtn:active path, .disabled-navbtn:focus path
+{
+    fill: #CECECE !important;
+    
 }
 
 .vizzu-navstatustext {
@@ -388,6 +405,14 @@ body
     font-size: 12px;
     color: #8e8e8e;
 }
-.vizzu-navbutton:hover .vizzu-navtooltip, .vizzu-navbutton:hover .vizzu-fullscreentooltip {
-    display: block;
+
+@media screen and (min-width:800px) {
+    .vizzu-navbutton:hover .vizzu-navtooltip, .vizzu-navbutton:hover .vizzu-fullscreentooltip {
+        display: block;
+    }
+
+    .vizzu-navbutton:hover path
+    {
+        fill: #404040;
+    }
 }
