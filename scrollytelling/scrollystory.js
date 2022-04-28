@@ -2,7 +2,7 @@
 import Vizzu from 'https://cdn.jsdelivr.net/npm/vizzu@latest/dist/vizzu.min.js';
 import ScrollyTelling from './scrollyTelling.js';
 import data from './data.js';
-import style from './style.js';
+import style from './scrollystyle.js';
 
 window.onbeforeunload = function () {
 	window.scrollTo(0, 0);
