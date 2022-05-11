@@ -1,10 +1,10 @@
 Continent,Year,Population
 Africa,'2020,1340598
-Asia,2020,4641055
-Europe,2020,747636
-Lat. Am. & C.,2020,653962
-North America,2020,368870
-Oceania,2020,42678
+Asia,'2020,4641055
+Europe,'2020,747636
+Lat. Am. & C.,'2020,653962
+North America,'2020,368870
+Oceania,'2020,42678
 Africa,2021,1373486
 Asia,2021,4679661
 Europe,2021,747747
